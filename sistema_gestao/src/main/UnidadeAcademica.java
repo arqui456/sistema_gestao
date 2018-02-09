@@ -124,6 +124,7 @@ public class UnidadeAcademica {
         
         System.out.println("Por favor insira o titulo da atividade");
         title = inputator.nextLine();
+        inputator.nextLine();
         System.out.println("Deseja inserir a descricao da atividade agora?\nDigite 1 para Sim e 0 para Nao");
         input = inputator.nextInt();
         while(input != 0 && input != 1) {
@@ -133,10 +134,10 @@ public class UnidadeAcademica {
         if(input == 1) {
             System.out.println("Insira a descricao da atividade: ");
             detais = inputator.nextLine();
+            inputator.nextLine();
         }
         System.out.println("Insira seu nome: ");
         name = inputator.nextLine();
-        
         System.out.println("Insira a Data de inicio (d/m/y): ");
         start = inputator.nextLine();
         startAux = start.split("/");
@@ -174,10 +175,9 @@ public class UnidadeAcademica {
     }
     
     private static void userAdd() {
-        String name;
         System.out.println("Por favor insira o nome do usuario: ");
-        String namae = inputator.nextLine();
-        name = namae;
+        String name = inputator.nextLine();
+        inputator.nextLine();
         System.out.println("Por favor insira o email do usuario: ");
         String email = inputator.nextLine();
         
