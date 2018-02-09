@@ -252,6 +252,7 @@ public class UnidadeAcademica {
     private static void status(){
         System.out.println("Por favor insira seu nome de usuario: ");
         String name = inputator.nextLine();
+        inputator.nextLine();
         boolean exist = false;
         boolean admin = false;
         for(int i = 0;i < totalUsers;i++) {
