@@ -1,29 +1,29 @@
 package actions;
 
 import tools.Time;
-import users.User;
 import resources.Resource;
 
 public class Action {
-	
+
 	private String title;
 	private String detais;
 	private String responsible;
-	
-	private User userActive;
-	private Resource resourseActive;
-
+	private Resource resourceActive;
 	private Time start;
 	private Time end;
 	
-	public Action(String title, String detais, String responsible, String resourse, Time start, Time end) {
+	public Action(){
+		
+	}
+	
+	public Action(String title, String detais, String responsible, Time start, Time end) {
 		this.title = title;
 		this.detais = detais;
 		this.start = start;
 		this.end = end;
 		this.responsible = responsible;
 		
-		this.resourseActive = new Resource(resourse, responsible, start, end);
+		this.resourceActive = new Resource(responsible, start, end);
 	}
 	
 	public String getResponsible() {
@@ -51,20 +51,12 @@ public class Action {
 		this.detais = detais;
 	}
 
-	public User getUserActive() {
-		return userActive;
-	}
-
-	public void setUserActive(User userActive) {
-		this.userActive = userActive;
-	}
-
 	public Resource getResourseActive() {
-		return resourseActive;
+		return resourceActive;
 	}
 
 	public void setResourseActive(Resource resourseActive) {
-		this.resourseActive = resourseActive;
+		this.resourceActive = resourseActive;
 	}
 
 	public Time getStart() {
