@@ -16,14 +16,13 @@ public class Action {
 		
 	}
 	
-	public Action(String title, String detais, String responsible, Time start, Time end) {
+	public Action(String title, String detais, String responsible,Resource resource, Time start, Time end) {
 		this.title = title;
 		this.detais = detais;
 		this.start = start;
 		this.end = end;
 		this.responsible = responsible;
-		
-		this.resourceActive = new Resource(responsible, start, end);
+		this.resourceActive = resource;
 	}
 	
 	public String getResponsible() {
@@ -34,7 +33,6 @@ public class Action {
 		this.responsible = responsible;
 	}
 	
-
 	public String getTitle() {
 		return title;
 	}
@@ -73,6 +71,13 @@ public class Action {
 
 	public void setEnd(Time end) {
 		this.end = end;
+	}
+
+	@Override
+	public String toString() {
+		return "Action [title=" + title + ", detais=" + detais
+				+ ", responsible=" + responsible + ", resourceActive="
+				+ resourceActive + ", start=" + start + ", end=" + end + "]";
 	}	
 	
 }

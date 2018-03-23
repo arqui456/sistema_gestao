@@ -2,97 +2,59 @@ package main;
 
 import java.util.Scanner;
 
+import resources.Auditorium;
+import resources.Classroom;
+import resources.Laboratory;
+import resources.Projector;
+import resources.Resource;
 import tools.Time;
 import tools.DateExtended;
 import tools.Date;
+import users.Administrator;
+import users.Doctorate;
+import users.Graduation;
+import users.Masters;
+import users.Researcher;
+import users.Teacher;
 import users.User;
 import actions.Action;
 
-public class UnidadeAcademica {
+public class Academy {
     
     private static int MAX = 1000;
     
-    private static Action[] actions = new Action[MAX];
-    private static User[] users = new User[MAX];
+    private Action[] actions = new Action[MAX];
+    private User[] users = new User[MAX];
     
-    private static Scanner inputator = new Scanner(System.in);
+    private Scanner inputator = new Scanner(System.in);
     
-    private static int actionsIndex = 0;
-    private static int usersIndex = 0;
+    private int actionsIndex = 0;
+    private int usersIndex = 0;
     
-    private static int[] resoursesInUse = new int[4];
-    private static int totalResourse = 0;
-    private static int totalAloc = 0;
-    private static int totalUsers = 0;
+    private int[] resoursesInUse = new int[4];
+    private int totalResourse = 0;
+    private int totalAloc = 0;
+    private int totalUsers = 0;
+    
+    UI frontEnd = new UI();
     
     
-    private static int menu() {
-        System.out.println("Selecione a acao que deseja realisar pelo numero:");
-        System.out.println("1. Alocacao de recursos");
-        System.out.println("2. Cadastro de usuarios");
-        System.out.println("3. Relatorio do sistema");
-        System.out.println("4. Alterar status de alocacao");
-        System.out.println("5. Finalizar programa");
-        
-        int input = inputator.nextInt();
-        while(input <= 0 || input > 5) {
-            System.out.println("Acao invalida, tente novamente");
-             input = inputator.nextInt();
-        }
-        
-        return input;
+    
+    public void resourseMenu() {
+    	int input = frontEnd.resourceMenu();
+        alocarRecurso(input);
     }
     
-    private static void resourseMenu() {
-        System.out.println("\nRecursos");
-        System.out.println("    1. Sala de aula");
-        System.out.println("    2. Auditorio");
-        System.out.println("    3. Projetor");
-        System.out.println("    4. Laboratorio");
-        System.out.println("    5. Finalizar");
+    public void alocarRecurso(int rec) {
+    	int input = frontEnd.resourceMenu2();
         
-        System.out.println("Selecione um recurso utilizando seu numero: ");
-        int input = inputator.nextInt();
-        
-        while(input <= 0 || input > 5){
-            System.out.println("Entrada invalida, tente novamente");
-            input = inputator.nextInt();
-        }
-        
-        switch(input) {
-            case 1:
-                alocarRecurso("Sala de aula");
-                break;
-            case 2:
-                alocarRecurso("Auditorio");
-                break;
-            case 3: 
-                alocarRecurso("Projetor");
-                break;
-            case 4:
-                alocarRecurso("Laboratorio");
-                break;
-            default:
-                break;
-        }
-        
-    }
-    
-    private static void alocarRecurso(String recurso) {
-        System.out.println("Selecione a sua ocupacao pelo numero abaixo:");
-        System.out.println("    1. Professor");
-        System.out.println("    2. Pesquisador");
-        System.out.println("    3. Administrador");
-        System.out.println("    4. Finalizar programa");
-        
-        int input = inputator.nextInt();
         
         String title;
         String detais = null;
-        User responsible;
-        String role;
+        //User responsible;
+        //String role;
         
-        String name;
+        String responsible;
         String start;
         String[] startAux;
         String hourr;
@@ -107,20 +69,6 @@ public class UnidadeAcademica {
         
         Time begin;
         Time end;
-        
-        switch(input) {
-            case 1:
-                role = "Professor";
-                break;
-            case 2:
-                role = "Pesquisador";
-                break;
-            case 3:
-                role = "Administrador";
-                break;
-            default:
-                break;
-        }
         
         System.out.println("Por favor insira o titulo da atividade");
         title = inputator.nextLine();
@@ -137,7 +85,7 @@ public class UnidadeAcademica {
             inputator.nextLine();
         }
         System.out.println("Insira seu nome: ");
-        name = inputator.nextLine();
+        responsible = inputator.nextLine();
         System.out.println("Insira a Data de inicio (d/m/y): ");
         start = inputator.nextLine();
         startAux = start.split("/");
@@ -168,62 +116,62 @@ public class UnidadeAcademica {
         
         end = new Time(new Date(day,month,year), new DateExtended(hour,minute, false));
         
-        actions[actionsIndex] = new Action(title, detais, name, recurso, begin, end);
+        Resource resource = new Resource();
+        switch(rec){
+            case 1:
+            	resource = new Classroom(responsible, begin, end);
+            	resoursesInUse[0] += 1;
+            	break;
+            case 2:
+            	resource = new Auditorium(responsible, begin, end);
+            	resoursesInUse[1] += 1;
+            	break;
+            case 3: 
+            	resource = new Projector(responsible, begin, end);
+            	resoursesInUse[2] += 1;
+            	break;
+            case 4:
+            	resource = new Laboratory(responsible, begin, end);
+            	resoursesInUse[3] += 1;
+            	break;
+            case 5:
+            	break;
+        }
         
-        resoursesInUse[0] += 1;
+        actions[actionsIndex] = new Action(title, detais, responsible, resource, begin, end);
+        
         totalResourse++;
     }
     
-    private static void userAdd() {
+    public void userAdd() {
+    	
         System.out.println("Por favor insira o nome do usuario: ");
         String name = inputator.nextLine();
         inputator.nextLine();
         System.out.println("Por favor insira o email do usuario: ");
         String email = inputator.nextLine();
         
-        System.out.println("O usuario e pesquisador? se sim digite 1 caso contrario 0");
-        int input = inputator.nextInt();
+        int input = frontEnd.userMenu();
         
-        while(input != 0 && input != 1) {
-            System.out.println("Entrada invalida, tente novamente");
-            input = inputator.nextInt();
-        }
-        boolean researcher = false;
-        if(input == 1) {
-            researcher = true;
-        }
-        System.out.println("Selecione a sua ocupacao pelo numero abaixo:");
-        System.out.println("    1. Professor");
-        System.out.println("    2. Pesquisador");
-        System.out.println("    3. Administrador");
-        System.out.println("    4. Estudante - Graduacao");
-        System.out.println("    5. Estudante - Mestrado");
-        System.out.println("    6. Estudante - Doutorado");
-        System.out.println("    7. Finalizar programa");
-        input = inputator.nextInt();
-        while(input <= 0 || input > 7) {
-            System.out.println("Entrada invalida, tente novamente: ");
-            input = inputator.nextInt();
-        }
-        String role = null;
+        User user = new User();
         switch(input) {
             case 1:
-                role = "Professor";
+            	user = new Teacher(name, email);
                 break;
             case 2:
-                role = "Pesquisador";
+            	user = new Researcher(name, email);
                 break;
             case 3:
-                role = "Administrador";
+            	user = new Administrator(name, email);
                 break;
-            case 4: 
-                role = "Graduacao";
+            case 4:
+            	user = new Graduation(name, email);
                 break;
-            case 5: 
-                role = "Mestrado";
+            case 5:
+            	user = new Masters(name, email);
                 break;
             case 6:
-                role = "Doutorado";
+            	user = new Doctorate(name, email);
                 break;
             case 7:
                 System.out.println("Finalizando o programa");
@@ -232,15 +180,13 @@ public class UnidadeAcademica {
                 break;
         }
         
-        User user1 = new User(name, email, researcher, role);
-        users[usersIndex] = user1;
+        users[usersIndex++] = user;
         totalUsers++;
         
-        System.out.println("usuario cadastrado: " + user1);
-        
+        System.out.println("usuario cadastrado: " + user);
     }
     
-    private static void sit() {
+    public void sit() {
         
         System.out.println("Total de usuarios no sistema: " + totalUsers);
         System.out.println("Numero de recursos em: \nProcesso de alocacao: " + resoursesInUse[0] + 
@@ -249,7 +195,7 @@ public class UnidadeAcademica {
         System.out.println("Numero total de alocacoes: " + totalAloc);
     }
     
-    private static void status(){
+    public void status(){
         System.out.println("Por favor insira seu nome de usuario: ");
         String name = inputator.nextLine();
         inputator.nextLine();
@@ -258,12 +204,14 @@ public class UnidadeAcademica {
         for(int i = 0;i < totalUsers;i++) {
             if(users[i].getName().equals(name)) {
                 exist = true;
-                if(users[i].getRole().equals("Administrador")) {
-                    admin = true;
+                if(users[i] instanceof Administrator ) {
+                	admin = true;
+                	break;
                 }
-                else 
-                    System.out.println("Usuario nao e administrador");
-                break;
+                else {
+                	System.out.println("Usuario nao e administrador");
+                	break;
+                }
             }
         }
         
@@ -391,11 +339,11 @@ public class UnidadeAcademica {
         
     }
     
-    public static void main(String[] args) {
-        boolean finalizado = false;
+    public void run(){
+    	boolean finished = false;
         int menu;
-        while(finalizado == false) {
-            menu = menu();
+        while(finished == false) {
+            menu = frontEnd.menu();
             switch(menu) {
                 case 1:
                     resourseMenu();
@@ -410,20 +358,14 @@ public class UnidadeAcademica {
                     status();
                     break;
                 case 5:
-                    System.out.println("Finalizando programa");
-                    finalizado = true;
+                    System.out.println("exiting program...");
+                    finished = true;
                     break;
                 default: 
                     break;
             }
             
         }
-        
-        
-        
-        
         inputator.close();
     }
-    
-
 }

@@ -6,4 +6,8 @@ public class Administrator extends User {
 		super();
 	}
 	
+	public Administrator(String name, String email){
+		super(name, email);
+	}
+	
 }

@@ -4,7 +4,6 @@ import tools.Time;
 
 public class Resource {
 	
-	private String status = "Em processo de alocacao";
 	private Time start;
 	private Time end;
 	private String responsible;
@@ -18,15 +17,7 @@ public class Resource {
 		this.start = start;
 		this.end = end;
 	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
+	
 	public Time getStart() {
 		return start;
 	}
@@ -53,10 +44,7 @@ public class Resource {
 
 	@Override
 	public String toString() {
-		return "Resourse [status=" + status + ", start=" + start + ", end="
+		return "Resourse [start=" + start + ", end="
 				+ end + ", responsible=" + responsible + "]";
 	}
-
-	
-	
 }
