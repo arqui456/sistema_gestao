@@ -1,18 +1,19 @@
-package resourses;
+package resources;
 
 import tools.Time;
 
-public class Resourse {
+public class Resource {
 	
 	private String status = "Em processo de alocacao";
 	private Time start;
 	private Time end;
 	private String responsible;
-	private String resourse;
 	
+	public Resource(){
+
+	}
 	
-	public Resourse(String resourse, String responsible, Time start, Time end) {
-		this.resourse = resourse;
+	public Resource(String responsible, Time start, Time end) {
 		this.responsible = responsible;
 		this.start = start;
 		this.end = end;
@@ -50,20 +51,12 @@ public class Resourse {
 		this.responsible = responsible;
 	}
 
-	public String getResourse() {
-		return resourse;
-	}
-
-	public void setResourse(String resourse) {
-		this.resourse = resourse;
-	}
-
 	@Override
 	public String toString() {
-		return "Resourse: " + resourse + " ,Status: " + status + " ,Responsible: " + responsible + " ,Start: " + start + " ,End: " + end;
+		return "Resourse [status=" + status + ", start=" + start + ", end="
+				+ end + ", responsible=" + responsible + "]";
 	}
-	
-	
-	
 
+	
+	
 }

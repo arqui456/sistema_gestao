@@ -2,7 +2,7 @@ package actions;
 
 import tools.Time;
 import users.User;
-import resourses.Resourse;
+import resources.Resource;
 
 public class Action {
 	
@@ -11,7 +11,7 @@ public class Action {
 	private String responsible;
 	
 	private User userActive;
-	private Resourse resourseActive;
+	private Resource resourseActive;
 
 	private Time start;
 	private Time end;
@@ -23,7 +23,7 @@ public class Action {
 		this.end = end;
 		this.responsible = responsible;
 		
-		this.resourseActive = new Resourse(resourse, responsible, start, end);
+		this.resourseActive = new Resource(resourse, responsible, start, end);
 	}
 	
 	public String getResponsible() {
@@ -59,11 +59,11 @@ public class Action {
 		this.userActive = userActive;
 	}
 
-	public Resourse getResourseActive() {
+	public Resource getResourseActive() {
 		return resourseActive;
 	}
 
-	public void setResourseActive(Resourse resourseActive) {
+	public void setResourseActive(Resource resourseActive) {
 		this.resourseActive = resourseActive;
 	}
 
