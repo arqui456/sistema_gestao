@@ -4,19 +4,14 @@ public class User {
 	
 	private String name;
 	private String email;
-	private boolean researcher;
-	private String role;
 	
-	public User(String name, String email, boolean researcher, String role) {
-		this(name, email,role);
-		this.researcher = researcher;	
+	public User(){
+		
 	}
 	
-	public User(String name, String email, String role) {
+	public User(String name, String email) {
 		this.name = name;
 		this.email = email;
-		this.role = role;
-		this.researcher = false;
 	}
 
 	public String getName() {
@@ -35,24 +30,9 @@ public class User {
 		this.email = email;
 	}
 
-	public boolean isResearcher() {
-		return researcher;
-	}
-
-	public void setResearcher(boolean researcher) {
-		this.researcher = researcher;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
 	@Override
 	public String toString() {
-		return "User: name = " + name + ", email = " + email + ", researcher = " + researcher + ", role = " + role;
+		return "User [name=" + name + ", email=" + email + "]";
 	}
+	
 }
