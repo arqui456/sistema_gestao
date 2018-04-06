@@ -1,15 +1,14 @@
 package main;
 
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 import resources.Auditorium;
 import resources.Classroom;
 import resources.Laboratory;
 import resources.Projector;
 import resources.Resource;
-import tools.Time;
-import tools.DateExtended;
-import tools.Date;
 import users.Administrator;
 import users.Doctorate;
 import users.Graduation;
@@ -18,18 +17,17 @@ import users.Researcher;
 import users.Teacher;
 import users.User;
 import actions.Action;
+import actions.Allocated;
+import actions.Completed;
+import actions.InAllocationProcess;
+import actions.InProgress;
 
 public class Academy {
-    
-    private static int MAX = 1000;
-    
-    private Action[] actions = new Action[MAX];
-    private User[] users = new User[MAX];
-    
+
     private Scanner inputator = new Scanner(System.in);
-    
-    private int actionsIndex = 0;
-    private int usersIndex = 0;
+
+    private List<Action> actions = new ArrayList<Action>();
+    private List<User> users = new ArrayList<User>();
     
     private int[] resoursesInUse = new int[4];
     private int totalResourse = 0;
@@ -38,8 +36,6 @@ public class Academy {
     
     UI frontEnd = new UI();
     
-    
-    
     public void resourseMenu() {
     	int input = frontEnd.resourceMenu();
         alocarRecurso(input);
@@ -47,99 +43,24 @@ public class Academy {
     
     public void alocarRecurso(int rec) {
     	int input = frontEnd.resourceMenu2();
-        
-        
-        String title;
-        String detais = null;
-        //User responsible;
-        //String role;
-        
-        String responsible;
-        String start;
-        String[] startAux;
-        String hourr;
-        String[] hourAux;
-        
-        
-        int day;
-        int month;
-        int year;
-        int hour;
-        int minute;
-        
-        Time begin;
-        Time end;
-        
-        System.out.println("Por favor insira o titulo da atividade");
-        title = inputator.nextLine();
-        inputator.nextLine();
-        System.out.println("Deseja inserir a descricao da atividade agora?\nDigite 1 para Sim e 0 para Nao");
-        input = inputator.nextInt();
-        while(input != 0 && input != 1) {
-            System.out.println("Entrada invalida, tente novamente! ");
-            input = inputator.nextInt();
-        }
-        if(input == 1) {
-            System.out.println("Insira a descricao da atividade: ");
-            detais = inputator.nextLine();
-            inputator.nextLine();
-        }
-        System.out.println("Insira seu nome: ");
-        responsible = inputator.nextLine();
-        System.out.println("Insira a Data de inicio (d/m/y): ");
-        start = inputator.nextLine();
-        startAux = start.split("/");
-        day = Integer.parseInt(startAux[0]);
-        month = Integer.parseInt(startAux[1]);
-        year = Integer.parseInt(startAux[2]);
-        
-        System.out.println("Insira a Hora de inicio (hora:minuto): ");
-        hourr = inputator.nextLine();
-        hourAux = hourr.split(":");
-        hour = Integer.parseInt(hourAux[0]);
-        minute = Integer.parseInt(hourAux[1]);
-        
-        begin = new Time(new Date(day,month,year), new DateExtended(hour,minute, false));
-        
-        System.out.println("Insira a Data de termino (d/m/y): ");
-        start = inputator.nextLine();
-        startAux = start.split("/");
-        day = Integer.parseInt(startAux[0]);
-        month = Integer.parseInt(startAux[1]);
-        year = Integer.parseInt(startAux[2]);
-        
-        System.out.println("Insira a Hora do termino (hora:minuto): ");
-        hourr = inputator.nextLine();
-        hourAux = hourr.split(":");
-        hour = Integer.parseInt(hourAux[0]);
-        minute = Integer.parseInt(hourAux[1]);
-        
-        end = new Time(new Date(day,month,year), new DateExtended(hour,minute, false));
-        
-        Resource resource = new Resource();
+        Action action = new Action(rec);
         switch(rec){
-            case 1:
-            	resource = new Classroom(responsible, begin, end);
-            	resoursesInUse[0] += 1;
-            	break;
-            case 2:
-            	resource = new Auditorium(responsible, begin, end);
-            	resoursesInUse[1] += 1;
-            	break;
-            case 3: 
-            	resource = new Projector(responsible, begin, end);
-            	resoursesInUse[2] += 1;
-            	break;
-            case 4:
-            	resource = new Laboratory(responsible, begin, end);
-            	resoursesInUse[3] += 1;
-            	break;
-            case 5:
-            	break;
-        }
-        
-        actions[actionsIndex] = new Action(title, detais, responsible, resource, begin, end);
-        
+        case 1:
+        	resoursesInUse[0] += 1;
+        	break;
+        case 2:
+        	resoursesInUse[1] += 1;
+        	break;
+        case 3: 
+        	resoursesInUse[2] += 1;
+        	break;
+        case 4:
+        	resoursesInUse[3] += 1;
+        	break;
+        case 5:
+        	break;
+    }
+        actions.add(action);
         totalResourse++;
     }
     
@@ -147,7 +68,7 @@ public class Academy {
     	
         System.out.println("Por favor insira o nome do usuario: ");
         String name = inputator.nextLine();
-        inputator.nextLine();
+  
         System.out.println("Por favor insira o email do usuario: ");
         String email = inputator.nextLine();
         
@@ -180,7 +101,7 @@ public class Academy {
                 break;
         }
         
-        users[usersIndex++] = user;
+        users.add(user);
         totalUsers++;
         
         System.out.println("usuario cadastrado: " + user);
@@ -198,13 +119,12 @@ public class Academy {
     public void status(){
         System.out.println("Por favor insira seu nome de usuario: ");
         String name = inputator.nextLine();
-        inputator.nextLine();
         boolean exist = false;
         boolean admin = false;
         for(int i = 0;i < totalUsers;i++) {
-            if(users[i].getName().equals(name)) {
+            if(users.get(i).getName().equals(name)) {
                 exist = true;
-                if(users[i] instanceof Administrator ) {
+                if(users.get(i) instanceof Administrator ) {
                 	admin = true;
                 	break;
                 }
@@ -215,48 +135,42 @@ public class Academy {
             }
         }
         
-        if(exist == true) {
-            System.out.println("Que recurso desejas alterar o status? ");
-            System.out.println("\nRecursos");
-            System.out.println("    1. Sala de aula");
-            System.out.println("    2. Auditorio");
-            System.out.println("    3. Projetor");
-            System.out.println("    4. Laboratorio");
-            int inputa = inputator.nextInt();
-            while(inputa <= 0 || inputa > 4) {
-                System.out.println("Entrada invalida, tente novamente: ");
-                inputa = inputator.nextInt();
-            }
-            String resourse = null;
-            switch(inputa) {
+        if(exist == true) {	
+        	int input = frontEnd.resourceMenu3();
+        
+            Resource resource = new Resource();
+            switch(input) {
                 case 1:
-                    resourse = "Sala de aula";
+                    resource = new Classroom();
                     break;
                 case 2:
-                    resourse = "Auditorio";
+                	resource = new Auditorium();
                     break;
                 case 3:
-                    resourse = "Projetor";
+                	resource = new Projector();
                     break;
                 case 4: 
-                    resourse = "Laboratorio";
+                    resource = new Laboratory();
                     break;
                 default:
                     break;  
             }
             
             for(int i = 0;i < totalResourse;i++) {
-                if(actions[i].getResourseActive().getResponsible().equals(name)) {
-                    if(actions[i].getResourseActive().getResourse().equals(resourse)) {
-                        if(actions[i].getResourseActive().getStatus().equals("Alocado")) {
+                if(actions.get(i).getResourseActive().getResponsible().equals(name)) {
+                    if(actions.get(i).getResourseActive() != null) {
+                        if(actions.get(i) instanceof Allocated) {
                             System.out.println("Encontramos um recurso alocado em seu nome, desejas confirmar a alocacao? 1 pra sim 0 caso contrario");
-                            inputa = inputator.nextInt();
-                            while(inputa != 0 && inputa != 1) {
+                            input = inputator.nextInt();
+                            while(input != 0 && input != 1) {
                                 System.out.println("entrada invalida, tente novamente: ");
-                                inputa = inputator.nextInt();
+                                input = inputator.nextInt();
                             }
-                            if(inputa == 1) {
-                                actions[i].getResourseActive().setStatus("Em andamento");
+                            if(input == 1) {
+                            	Action action = actions.get(i);
+                            	action = new InProgress();
+                            	actions.remove(i);
+                            	actions.add(action);
                                 break;
                             }
                             else
@@ -271,20 +185,23 @@ public class Academy {
                         String title = inputator.nextLine();
                         System.out.println("...Pesquisando por atividade...");
                         for(i = 0; i < totalResourse;i++) {
-                            if(actions[i].getTitle().equals(title)) {
-                                if(actions[i].getResourseActive().getStatus().equals("Em processo de alocacao")) {
-                                    if(actions[i].getResourseActive().getResourse() != null && 
-                                       actions[i].getResourseActive().getResponsible() != null &&
-                                       actions[i].getResourseActive().getStart() != null &&
-                                       actions[i].getResourseActive().getEnd() != null) {
+                            if(actions.get(i).getTitle().equals(title)) {
+                                if(actions.get(i) instanceof InAllocationProcess ) {
+                                    if(actions.get(i).getResourseActive() != null && 
+                                       actions.get(i).getResourseActive().getResponsible() != null &&
+                                       actions.get(i).getResourseActive().getStart() != null &&
+                                       actions.get(i).getResourseActive().getEnd() != null) {
                                         System.out.println("Encontramos a atividade, deseja alocala? 1 para sim 0 caso contrario ");
-                                        inputa = inputator.nextInt();
-                                        while(inputa != 1 && inputa != 0) {
+                                        input = inputator.nextInt();
+                                        while(input != 1 && input != 0) {
                                             System.out.println("Entrada invalida, tente novamente");
-                                            inputa = inputator.nextInt();
+                                            input = inputator.nextInt();
                                         }
-                                        if(inputa == 1 && admin == true) {
-                                            actions[i].getResourseActive().setStatus("Alocado");
+                                        if(input == 1 && admin == true) {
+                                        	Action action = actions.get(i);
+                                        	action = new Allocated();
+                                        	actions.remove(i);
+                                        	actions.add(action);
                                         }
                                         else {
                                             System.out.println("Usuario nao e admin, operacao cancelada");
@@ -294,16 +211,19 @@ public class Academy {
                                         System.out.println("Recurso nao possui todas os dados basicos, cancelando operacao");
                                     }
                                 }
-                                else if(actions[i].getResourseActive().getStatus().equals("Em andamento")) {
-                                    if(actions[i].getDetais() != null) {
+                                else if(actions.get(i) instanceof InProgress ) {
+                                    if(actions.get(i).getDetais() != null) {
                                         System.out.println("Encontramos a em andamento, deseja conclui-la? 1 para sim 0 caso contrario ");
-                                        inputa = inputator.nextInt();
-                                        while(inputa != 1 && inputa != 0) {
+                                        input = inputator.nextInt();
+                                        while(input != 1 && input != 0) {
                                             System.out.println("Entrada invalida, tente novamente");
-                                            inputa = inputator.nextInt();
+                                            input = inputator.nextInt();
                                         }
-                                        if(inputa == 1 && admin == true) {
-                                            actions[i].getResourseActive().setStatus("Concluido");
+                                        if(input == 1 && admin == true) {
+                                        	Action action = actions.get(i);
+                                        	action = new Completed();
+                                        	actions.remove(i);
+                                        	actions.add(action);
                                         }
                                         else {
                                             System.out.println("Usuario nao e admin, operacao cancelada");

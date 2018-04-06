@@ -20,15 +20,14 @@ public class UI {
         
         int input = inputer.nextInt();
         while(input <= 0 || input > 5) {
-            System.out.println("Acao invalida, tente novamente");
+            System.out.println("Entrada invalida, tente novamente");
              input = inputer.nextInt();
         }
-        
         return input;
     }
 	
 	public int resourceMenu(){
-		System.out.println("\nRecursos");
+		System.out.println("Recursos");
         System.out.println("    1. Sala de aula");
         System.out.println("    2. Auditorio");
         System.out.println("    3. Projetor");
@@ -54,10 +53,28 @@ public class UI {
         
         int input = inputer.nextInt();
         while(input > 4 && input < 1){
-        	System.out.println("Invalid option, try again: ");
+        	System.out.println("Entrada invalida, tente novamente");
         	input = inputer.nextInt();
         }
         return input;
+	}
+	
+	public int resourceMenu3(){
+		System.out.println("    Que recurso desejas alterar o status?");
+        System.out.println("    1. Sala de aula");
+        System.out.println("    2. Auditorio");
+        System.out.println("    3. Projetor");
+        System.out.println("    4. Laboratorio");
+        System.out.println("    5. Finalizar");
+        
+        System.out.println("Selecione um recurso utilizando seu numero: ");
+        int input = inputer.nextInt();
+        
+        while(input <= 0 || input > 5){
+            System.out.println("Entrada invalida, tente novamente");
+            input = inputer.nextInt();
+        }
+		return input;
 	}
 	
 	public int userMenu(){
@@ -76,4 +93,6 @@ public class UI {
         }
 		return input;
 	}
+	
+	
 }
